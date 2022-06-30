@@ -17,6 +17,7 @@ struct ContentView: View {
         NavigationView {
             VStack{
                 List {
+                    
                     ForEach(Array(todos.list.sortedKeys()), id:\.self){ key in
                                 Section(header: Text(key)){
                                     ForEach(todos.list[key]?.filter{ !$0.hidden } ?? []){ todo in
