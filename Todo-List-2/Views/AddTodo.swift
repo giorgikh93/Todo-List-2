@@ -69,12 +69,9 @@ struct AddTodo: View {
                 .padding(14)
                 .navigationTitle("Add an Item")
              
-
             }
            
         }
-  
-
     }
     func save(){
         if text.isEmpty {

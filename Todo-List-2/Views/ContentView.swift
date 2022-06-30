@@ -13,7 +13,6 @@ struct ContentView: View {
     @State  var isShowing = false
     var statuses = [Status.initial, Status.inProgress, Status.completed, Status.overdue, Status.all ]
     
-    
     var body: some View {
         NavigationView {
             VStack{
@@ -41,12 +40,10 @@ struct ContentView: View {
                                         })
                                         .onMove(perform: { indexSet, int in
                                             move(from: indexSet, to: int, key:key)
-                                        } )
+                                        }
+                                    )
                                   
-                                       
-                                }
-                           
-
+                            }
                     }
                    
                 }
