@@ -42,8 +42,8 @@ class Todo: Identifiable, Codable {
     init(id:String = UUID().uuidString, text:String, isCompleted:Bool? = false, deadline:Date, status:Status, hidden:Bool? = false){
         self.id = id
         self.text = text
-        self.isCompleted =  isCompleted!
-        self.status =   status
+        self.isCompleted = isCompleted!
+        self.status = status
         self.deadline = deadline
         self.hidden = hidden ?? false
     }

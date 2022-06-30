@@ -16,6 +16,26 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack{
+                
+                if todos.list.isEmpty {
+                    VStack{
+                        Button{
+                            isShowing = true
+                        } label:{
+                            VStack {
+                                Text("Click the button to create your first Todo")
+                                    .padding()
+                                Image(systemName:"plus.square.dashed")
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .scaledToFit()
+
+                            }
+                        }
+                        
+                    }
+                }
+            else{
                 List {
                     ForEach(Array(todos.list.sortedKeys()), id:\.self){ key in
                                 Section(header: Text(key)){
@@ -24,7 +44,7 @@ struct ContentView: View {
                                                 AddTodo(
                                                     isShowing: $isShowing,
                                                     text:todo.text,
-                                                    deadline:todo.deadline,   
+                                                    deadline:todo.deadline,
                                                     todo:todo,
                                                     dismiss: {}
 
@@ -47,23 +67,31 @@ struct ContentView: View {
                     }
                    
                 }
+
+                }
             }
             
             .navigationTitle("Todo List")
             .navigationBarItems(
-                leading: EditButton(),
+                leading: VStack{
+                    if !todos.list.isEmpty {
+                        EditButton()
+                    }
+                },
                 trailing: HStack{
                     HStack{
-                     
-                        Picker("Fiter", selection: $todos.selectedStatus  ){
-                            ForEach(0..<statuses.count){ statusIndex in
-                                Text(statusExpression[self.statuses[statusIndex]]?.title ?? "")
+                        if !todos.list.isEmpty {
+                            Picker("Fiter", selection: $todos.selectedStatus  ){
+                                ForEach(0..<statuses.count){ statusIndex in
+                                    Text(statusExpression[self.statuses[statusIndex]]?.title ?? "")
+                                }
+                            }
+                            .onChange(of: todos.selectedStatus) { statusIndex in
+                                todos.filterByStatus(status: statuses[statusIndex])
+                                
                             }
                         }
-                        .onChange(of: todos.selectedStatus) { statusIndex in
-                            todos.filterByStatus(status: statuses[statusIndex])
-                            
-                        }
+                     
                         
                     }
                     Button {

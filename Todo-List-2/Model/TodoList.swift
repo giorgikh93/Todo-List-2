@@ -39,8 +39,6 @@ class TodoList:ObservableObject {
         
     }
     
-
-    
     func add(text:String, key:String, deadline:Date, isCompleted:Bool? = false, status:Status? = .initial) {
         var status = status
         if status == .initial && !deadline.isInSameDay(as: Date.now) && deadline.isInThePast {
