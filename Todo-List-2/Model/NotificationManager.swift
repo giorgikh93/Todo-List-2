@@ -8,6 +8,8 @@
 import Foundation
 import UserNotifications
 
+//Need to implment background app processes listener logic in order to throw notification when current Date > todo.deadline
+
 class NotificationManager:ObservableObject {
     @Published private(set) var notifications: [UNNotificationRequest] = []
     @Published private(set) var authorizationStatus: UNAuthorizationStatus?
