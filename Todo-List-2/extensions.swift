@@ -6,19 +6,17 @@
 //
 
 import Foundation
-
+let defaultFormat = "dd MMMM, y"
 extension String {
-    func toDate(format:String = "dd MMMM, y") -> Date {
+    func toDate(format:String = defaultFormat) -> Date {
         let formatter = DateFormatter()
         formatter.dateFormat = format
         return formatter.date(from: self)!
     }
-    
-
 }
 
 extension Date {
-    func toString(format: String = "dd MMMM, y") -> String {
+    func toString(format: String = defaultFormat) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = format
         return formatter.string(from: self)

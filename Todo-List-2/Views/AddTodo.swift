@@ -79,10 +79,11 @@ struct AddTodo: View {
             alertMessage = "Todo title is required!"
             return
         }
-        let formattedDate = deadline.formatted(date: .long, time: .omitted)
+        let formattedDate = deadline.toString()
         
         if isEditMode {
             todosService.updateTodo(todo: todo ?? Todo(text: "", deadline: deadline, status: .initial), text: text, key: formattedDate, deadline: deadline)
+            presentationMode.wrappedValue.dismiss()
             return
         }
         todosService.add(text:text, key:formattedDate, deadline: deadline)

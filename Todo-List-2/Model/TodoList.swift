@@ -39,6 +39,12 @@ class TodoList:ObservableObject {
         
     }
     
+    func clearTodos() {
+        defaults.removeObject(forKey: key)
+        list = [:]
+        
+    }
+    
     func add(text:String, key:String, deadline:Date, isCompleted:Bool? = false, status:Status? = .initial) {
         var status = status
         if status == .initial && !deadline.isInSameDay(as: Date.now) && deadline.isInThePast {
@@ -98,15 +104,21 @@ class TodoList:ObservableObject {
     func updateTodo(todo:Todo, text:String, key:String, deadline:Date) {
         let sameDay = deadline.isInSameDay(as: todo.deadline)
         if !sameDay {
-            let formattedDate = deadline.formatted(date: .long, time: .omitted)
-            let prevDate = todo.deadline.formatted(date: .long, time: .omitted)
+            let formattedDate = deadline.toString()
+            let prevDate = todo.deadline.toString()
             if  let index = list[prevDate]?.firstIndex(where: { $0.text == text }){
                   list[prevDate]?.remove(at: index)
                     if list[prevDate] == nil || list[prevDate]?.count == 0 {
                         list.removeValue(forKey: prevDate)
                     }
             }
-            add(text: text, key: formattedDate, deadline: deadline, isCompleted: todo.isCompleted, status: todo.status )
+            var status:Status {
+                if (todo.status == .initial || todo.status == .overdue) && (deadline.isInTheFuture || deadline.isInToday) {
+                    return .initial
+                }
+                return todo.status
+            }
+            add(text: text, key: formattedDate, deadline: deadline, isCompleted: todo.isCompleted, status: status )
             return
         }
        
