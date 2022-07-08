@@ -10,6 +10,7 @@ import SwiftUI
 struct AddTodo: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var todosService: TodoList
+    @EnvironmentObject var notificationManager: NotificationManager
     @Binding var isShowing: Bool
     @State var text = ""
     @State var deadline: Date
@@ -72,6 +73,9 @@ struct AddTodo: View {
             }
            
         }
+        .onDisappear {
+            notificationManager.reloadLocalNotifications()
+        }
     }
     func save(){
         if text.isEmpty {
@@ -87,6 +91,11 @@ struct AddTodo: View {
             return
         }
         todosService.add(text:text, key:formattedDate, deadline: deadline)
+        
+//        let dateComponents = Calendar.current.dateComponents([.hour, .minute, .day, .month, .year], from: deadline)
+//        guard let hour = dateComponents.hour, let minute = dateComponents.minute, let day = dateComponents.day, let month = dateComponents.month, let year = dateComponents.year else { return }
+//        notificationManager.createLocalNotification( hour: hour, minute: minute,day: day, month: month, year: year)
+        
         if isShowing != nil {
             isShowing = false
         }

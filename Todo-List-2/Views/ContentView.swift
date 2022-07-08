@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var todos = TodoList()
-    
+    @StateObject var notificationManager = NotificationManager()
     @State  var isShowing = false
     var statuses = [Status.initial, Status.inProgress, Status.completed, Status.overdue, Status.all ]
     
@@ -35,6 +35,7 @@ struct ContentView: View {
                         
                     }
                 }
+              
             else{
                 List {
                     ForEach(Array(todos.list.sortedKeys()), id:\.self){ key in
@@ -70,7 +71,6 @@ struct ContentView: View {
 
                 }
             }
-            
             .navigationTitle("Todo List")
             .navigationBarItems(
                 leading: VStack{
@@ -90,6 +90,7 @@ struct ContentView: View {
                                 todos.filterByStatus(status: statuses[statusIndex])
                                 
                             }
+                      
                         }
                      
                         
@@ -103,13 +104,23 @@ struct ContentView: View {
                 }
             )
         }
+        .onAppear(perform: notificationManager.reloadAuthorizationStatus)
+        .onChange(of: notificationManager.authorizationStatus) { authorizationStatus in
+            switch authorizationStatus {
+            case .notDetermined:
+                notificationManager.requestAuthorization()
+            case .authorized:
+                notificationManager.reloadLocalNotifications()
+            default:
+                break
+            }
+        }
         .sheet(isPresented: $isShowing){
             AddTodo(isShowing: $isShowing, deadline: Date.now, dismiss:{})
-                
-            
         }
      
         .environmentObject(todos)
+        .environmentObject(notificationManager)
 
     }
     

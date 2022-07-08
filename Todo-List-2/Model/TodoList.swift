@@ -20,7 +20,8 @@ class TodoList:ObservableObject {
         if let data = defaults.data(forKey: key) {
             if let decoded = try? JSONDecoder().decode([String:[Todo]].self, from:data){
                 decoded.keys.forEach({ key in
-                    if key.toDate().isInThePast {
+                    
+                    if !key.toDate().isInToday && key.toDate().isInThePast {
                         decoded[key]?.forEach{ if $0.status == .initial {
                             $0.status = .overdue
                         }
@@ -168,7 +169,7 @@ class TodoList:ObservableObject {
     }
     
     func save(){
-        
+            
             if let encoded = try? JSONEncoder().encode(list) {
                 defaults.set(encoded, forKey: key)
                 
